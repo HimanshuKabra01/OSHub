@@ -7,7 +7,8 @@ import CreatePage from "./components/CreatePage"
 import BountyDetailsPage from "./components/BountyDetailsPage"
 import LoginPage from "./components/LoginPage"
 import SignupPage from "./components/SignupPage"
-
+import Privacy from "./components/Privacy"
+import Terms from "./components/terms"
 function App() {
   return (
     <Router>
@@ -50,6 +51,22 @@ function App() {
                 <Navbar />
                 <BountyDetailsPage />
                 <Footer />
+              </>
+            }
+          />
+          <Route
+            path="/privacy"
+            element={
+              <>
+                <Privacy/>
+              </>
+            }
+          />
+          <Route
+            path="/terms"
+            element={
+              <>
+                <Terms/>
               </>
             }
           />
