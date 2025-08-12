@@ -2,6 +2,15 @@ import {Link } from "react-router-dom"
 export default function Terms(){
   return (
     <div className="max-w-4xl mx-auto px-8 py-16 text-gray-300">
+      <nav className="bg-gray-800/80 backdrop-blur-sm border-b border-gray-700 sticky top-0 z-50 mb-20">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            <Link to="/" className="text-emerald-400 hover:text-emerald-300 text-lg font-medium transition-colors">
+              ← Back to Home
+            </Link>
+          </div>
+        </div>
+      </nav>
       <div className="mb-12">
         <h1 className="text-4xl font-bold mb-4 text-white">Terms of Service</h1>
         <p className="text-gray-400">Effective Date: August 11, 2025</p>
