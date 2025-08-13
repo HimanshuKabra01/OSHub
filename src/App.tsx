@@ -8,6 +8,7 @@ import BountyDetailsPage from "./components/BountyDetailsPage"
 import LoginPage from "./components/LoginPage"
 import SignupPage from "./components/SignupPage"
 
+export default App
 function App() {
   return (
     <Router>
@@ -60,5 +61,3 @@ function App() {
     </Router>
   )
 }
-
-export default App
