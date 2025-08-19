@@ -68,34 +68,35 @@
 
 /* Mobile touch enhancements */
 @media (max-width: 768px) {
+
   /* Ensure minimum touch target size */
-  button, 
-  [role="button"], 
-  input, 
-  select, 
+  button,
+  [role="button"],
+  input,
+  select,
   textarea,
   a {
     min-height: 44px;
   }
-  
+
   /* Improve tap target spacing */
-  .mobile-touch-spacing > * + * {
+  .mobile-touch-spacing>*+* {
     margin-top: 0.75rem;
   }
-  
+
   /* Better readability on small screens */
-  p, 
+  p,
   .text-sm {
     line-height: 1.6;
   }
-  
+
   /* Prevent horizontal scroll */
   body {
     overflow-x: hidden;
   }
-  
+
   /* Ensure proper spacing for mobile cards */
-  .grid > * {
+  .grid>* {
     margin-bottom: 1rem;
   }
 }
@@ -106,11 +107,13 @@
     min-height: 44px;
     min-width: 44px;
   }
-  
-  input, select, textarea {
+
+  input,
+  select,
+  textarea {
     min-height: 44px;
   }
-  
+
   .touch-target {
     min-height: 44px;
     min-width: 44px;
@@ -122,11 +125,11 @@
   ::-webkit-scrollbar {
     width: 6px;
   }
-  
+
   ::-webkit-scrollbar-track {
     background: rgba(255, 255, 255, 0.1);
   }
-  
+
   ::-webkit-scrollbar-thumb {
     background: rgba(16, 185, 129, 0.5);
     border-radius: 3px;
@@ -156,7 +159,10 @@
 
 /* Mobile-optimized animations */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
@@ -177,17 +183,17 @@
     font-size: 0.75rem;
     line-height: 1rem;
   }
-  
+
   .text-responsive-sm {
     font-size: 0.875rem;
     line-height: 1.25rem;
   }
-  
+
   .text-responsive-base {
     font-size: 1rem;
     line-height: 1.5rem;
   }
-  
+
   .text-responsive-lg {
     font-size: 1.125rem;
     line-height: 1.75rem;
