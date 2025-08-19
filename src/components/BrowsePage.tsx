@@ -107,9 +107,9 @@ export default function BrowsePage() {
         </div>
 
         {/* Filters */}
-        <div className="bg-black/20 backdrop-blur-sm rounded-xl border border-gray-800/50 p-6 mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-            <div className="relative md:col-span-2">
+        <div className="bg-black/20 backdrop-blur-sm rounded-xl border border-gray-800/50 p-4 sm:p-6 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+            <div className="relative sm:col-span-2 xl:col-span-2">
               <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
               <Input
                 placeholder="Search issues, technologies..."
@@ -155,7 +155,7 @@ export default function BrowsePage() {
         </div>
 
         {/* Stats Bar */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           <Card className="bg-gradient-to-r from-emerald-500/10 to-blue-500/10 border-emerald-500/20 backdrop-blur-sm">
             <CardContent className="p-4 text-center">
               <div className="text-2xl font-bold text-emerald-400 font-mono">24</div>
@@ -183,7 +183,7 @@ export default function BrowsePage() {
         </div>
 
         {/* Bounties Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
           {bounties.map((bounty) => (
             <Card
               key={bounty.id}

@@ -57,21 +57,21 @@ export default function HomePage() {
               Open Source Bounty Platform
             </Badge>
           </div>
-          <h1 className="text-6xl font-bold text-white mb-6 leading-tight">
+          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
             Code Solutions,{" "}
             <span className="bg-gradient-to-r from-emerald-400 via-blue-400 to-emerald-400 bg-clip-text text-transparent">
               Earn Bounties
             </span>
           </h1>
-          <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
             A professional platform connecting developers with technical challenges. Contribute to open source projects,
             solve complex problems, and get rewarded for your expertise.
           </p>
-          <div className="flex justify-center space-x-4">
+          <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
             <Link to="/browse">
               <Button
                 size="lg"
-                className="bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-700 hover:to-blue-700 text-white px-8 py-4 text-lg"
+                className="bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-700 hover:to-blue-700 text-white px-8 py-4 text-lg w-full sm:w-auto"
               >
                 <GitBranch className="mr-2 h-5 w-5" />
                 Browse Issues
@@ -81,7 +81,7 @@ export default function HomePage() {
               <Button
                 size="lg"
                 variant="outline"
-                className="border-emerald-500/50 text-emerald-400 hover:bg-emerald-500/10 hover:text-emerald-300 px-8 py-4 text-lg bg-transparent"
+                className="border-emerald-500/50 text-emerald-400 hover:bg-emerald-500/10 hover:text-emerald-300 px-8 py-4 text-lg bg-transparent w-full sm:w-auto"
               >
                 <Bug className="mr-2 h-5 w-5" />
                 Post Bounty
@@ -282,10 +282,10 @@ export default function HomePage() {
       {/* Stats */}
       <section className="py-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 text-center">
           <div className="group">
             <div
-              className="text-4xl font-bold bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent mb-2 group-hover:scale-110 transition-transform font-mono stat-number"
+              className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent mb-2 group-hover:scale-110 transition-transform font-mono stat-number"
               data-target="2500"
             >
               0
@@ -295,7 +295,7 @@ export default function HomePage() {
 
           <div className="group">
             <div
-              className="text-4xl font-bold bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent mb-2 group-hover:scale-110 transition-transform font-mono"
+              className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent mb-2 group-hover:scale-110 transition-transform font-mono"
             >
               ₹1.2Cr+
             </div>
@@ -304,7 +304,7 @@ export default function HomePage() {
 
           <div className="group">
             <div
-              className="text-4xl font-bold bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent mb-2 group-hover:scale-110 transition-transform font-mono stat-number"
+              className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent mb-2 group-hover:scale-110 transition-transform font-mono stat-number"
               data-target="1200"
             >
               0
@@ -314,7 +314,7 @@ export default function HomePage() {
 
           <div className="group">
             <div
-              className="text-4xl font-bold bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent mb-2 group-hover:scale-110 transition-transform font-mono stat-number"
+              className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent mb-2 group-hover:scale-110 transition-transform font-mono stat-number"
               data-target="98.5"
               data-suffix="%"
             >
@@ -326,18 +326,18 @@ export default function HomePage() {
       </div>
     </section>
 
-      {/* CTA Section */}
+          {/* CTA Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-emerald-900/20 to-blue-900/20 backdrop-blur-sm">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold text-white mb-6">Join the Developer Community</h2>
-          <p className="text-xl text-gray-300 mb-8">
+          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">Join the Developer Community</h2>
+          <p className="text-lg sm:text-xl text-gray-300 mb-8">
             Connect with professional developers, contribute to open source, and earn competitive bounties
           </p>
-          <div className="flex justify-center space-x-4">
+          <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
             <Link to="/auth/signup">
               <Button
                 size="lg"
-                className="bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-700 hover:to-blue-700 text-white px-8 py-4 text-lg"
+                className="bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-700 hover:to-blue-700 text-white px-8 py-4 text-lg w-full sm:w-auto"
               >
                 <Terminal className="mr-2 h-5 w-5" />
                 Start Contributing
@@ -347,7 +347,7 @@ export default function HomePage() {
               <Button
                 size="lg"
                 variant="outline"
-                className="border-emerald-500/50 text-emerald-400 hover:bg-emerald-500/10 hover:text-emerald-300 px-8 py-4 text-lg bg-transparent"
+                className="border-emerald-500/50 text-emerald-400 hover:bg-emerald-500/10 hover:text-emerald-300 px-8 py-4 text-lg bg-transparent w-full sm:w-auto"
               >
                 <Code className="mr-2 h-5 w-5" />
                 Explore Issues
