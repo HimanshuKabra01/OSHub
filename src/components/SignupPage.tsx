@@ -9,6 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Github, Mail, Terminal, Eye, EyeOff } from "lucide-react"
 import { Link } from "react-router-dom"
+import AuthService from "@/services/authService"
 
 export default function SignupPage() {
   const [formData, setFormData] = useState({
@@ -22,9 +23,43 @@ export default function SignupPage() {
 
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState<string | null>(null)
 
   const updateFormData = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
+  }
+
+  const handleSignup = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setError(null)
+    setSuccess(null)
+
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match")
+      return
+    }
+
+    try {
+      setLoading(true)
+      const response = await AuthService.signUp(
+        formData.email,
+        formData.password,
+        `${formData.firstName} ${formData.lastName}`,
+        formData.userType || "user"
+      )
+
+      if (response.success) {
+        setSuccess(response.message)
+      } else {
+        setError(response.message)
+      }
+    } catch (err: any) {
+      setError("Something went wrong. Please try again.")
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -47,34 +82,9 @@ export default function SignupPage() {
             Connect with the developer community and start earning bounties
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <Button
-              variant="outline"
-              className="w-full border-gray-600 text-gray-300 hover:bg-gray-700/50 bg-transparent"
-            >
-              <Github className="mr-2 h-4 w-4" />
-              GitHub
-            </Button>
-            <Button
-              variant="outline"
-              className="w-full border-gray-600 text-gray-300 hover:bg-gray-700/50 bg-transparent"
-            >
-              <Mail className="mr-2 h-4 w-4" />
-              Google
-            </Button>
-          </div>
-
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t border-gray-700" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-gray-800 px-2 text-gray-400">Or create account</span>
-            </div>
-          </div>
-
-          <div className="space-y-4">
+        <CardContent>
+          <form className="space-y-4" onSubmit={handleSignup}>
+            {/* Names */}
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="firstName" className="text-white font-medium">
@@ -85,7 +95,7 @@ export default function SignupPage() {
                   placeholder="Rajesh"
                   value={formData.firstName}
                   onChange={(e) => updateFormData("firstName", e.target.value)}
-                  className="bg-gray-800/50 border-gray-700 text-white placeholder:text-gray-400 focus:border-emerald-500"
+                  className="bg-gray-800/50 border-gray-700 text-white"
                   required
                 />
               </div>
@@ -98,12 +108,13 @@ export default function SignupPage() {
                   placeholder="Kumar"
                   value={formData.lastName}
                   onChange={(e) => updateFormData("lastName", e.target.value)}
-                  className="bg-gray-800/50 border-gray-700 text-white placeholder:text-gray-400 focus:border-emerald-500"
+                  className="bg-gray-800/50 border-gray-700 text-white"
                   required
                 />
               </div>
             </div>
 
+            {/* Email */}
             <div className="space-y-2">
               <Label htmlFor="email" className="text-white font-medium">
                 Email Address
@@ -114,28 +125,32 @@ export default function SignupPage() {
                 placeholder="developer@example.com"
                 value={formData.email}
                 onChange={(e) => updateFormData("email", e.target.value)}
-                className="bg-gray-800/50 border-gray-700 text-white placeholder:text-gray-400 focus:border-emerald-500"
+                className="bg-gray-800/50 border-gray-700 text-white"
                 required
               />
             </div>
 
+            {/* Account Type */}
             <div className="space-y-2">
               <Label htmlFor="userType" className="text-white font-medium">
                 Account Type
               </Label>
-              <Select value={formData.userType} onValueChange={(value) => updateFormData("userType", value)}>
+              <Select
+                value={formData.userType}
+                onValueChange={(value) => updateFormData("userType", value)}
+              >
                 <SelectTrigger className="bg-gray-800/50 border-gray-700 text-white">
                   <SelectValue placeholder="Select your role" />
                 </SelectTrigger>
                 <SelectContent className="bg-gray-800 border-gray-700">
-                  <SelectItem value="developer">Developer (Solve technical challenges)</SelectItem>
-                  <SelectItem value="client">Client (Post bounties)</SelectItem>
-                  <SelectItem value="both">Both (Developer & Client)</SelectItem>
+                  <SelectItem value="developer">Developer</SelectItem>
+                  <SelectItem value="client">Client</SelectItem>
+                  <SelectItem value="both">Both</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
-            {/* Password Field */}
+            {/* Password */}
             <div className="relative space-y-2">
               <Label htmlFor="password" className="text-white font-medium">
                 Password
@@ -145,7 +160,7 @@ export default function SignupPage() {
                 type={showPassword ? "text" : "password"}
                 value={formData.password}
                 onChange={(e) => updateFormData("password", e.target.value)}
-                className="bg-gray-800/50 border-gray-700 text-white placeholder:text-gray-400 focus:border-emerald-500 pr-10"
+                className="bg-gray-800/50 border-gray-700 text-white pr-10"
                 required
               />
               <div
@@ -156,7 +171,7 @@ export default function SignupPage() {
               </div>
             </div>
 
-            {/* Confirm Password Field */}
+            {/* Confirm Password */}
             <div className="relative space-y-2">
               <Label htmlFor="confirmPassword" className="text-white font-medium">
                 Confirm Password
@@ -166,7 +181,7 @@ export default function SignupPage() {
                 type={showConfirmPassword ? "text" : "password"}
                 value={formData.confirmPassword}
                 onChange={(e) => updateFormData("confirmPassword", e.target.value)}
-                className="bg-gray-800/50 border-gray-700 text-white placeholder:text-gray-400 focus:border-emerald-500 pr-10"
+                className="bg-gray-800/50 border-gray-700 text-white pr-10"
                 required
               />
               <div
@@ -177,8 +192,9 @@ export default function SignupPage() {
               </div>
             </div>
 
+            {/* Terms */}
             <div className="flex items-center space-x-2">
-              <Checkbox id="terms" className="border-gray-600" />
+              <Checkbox id="terms" className="border-gray-600" required />
               <Label htmlFor="terms" className="text-sm text-gray-300">
                 I agree to the{" "}
                 <Link to="/terms" className="text-emerald-400 hover:text-emerald-300">
@@ -191,27 +207,27 @@ export default function SignupPage() {
               </Label>
             </div>
 
-            <div className="flex items-center space-x-2">
-              <Checkbox id="newsletter" className="border-gray-600" />
-              <Label htmlFor="newsletter" className="text-sm text-gray-300">
-                Subscribe to developer updates and new bounty notifications
-              </Label>
+            {/* Error / Success */}
+            {error && <p className="text-red-400 text-sm">{error}</p>}
+            {success && <p className="text-green-400 text-sm">{success}</p>}
+
+            {/* Submit */}
+            <Button
+              type="submit"
+              className="w-full bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-700 hover:to-blue-700"
+              size="lg"
+              disabled={loading}
+            >
+              {loading ? "Creating Account..." : "Create Developer Account"}
+            </Button>
+
+            <div className="text-center text-sm text-gray-400">
+              Already have an account?{" "}
+              <Link to="/auth/login" className="text-emerald-400 hover:text-emerald-300">
+                Sign in
+              </Link>
             </div>
-          </div>
-
-          <Button
-            className="w-full bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-700 hover:to-blue-700"
-            size="lg"
-          >
-            Create Developer Account
-          </Button>
-
-          <div className="text-center text-sm text-gray-400">
-            Already have an account?{" "}
-            <Link to="/auth/login" className="text-emerald-400 hover:text-emerald-300">
-              Sign in
-            </Link>
-          </div>
+          </form>
         </CardContent>
       </Card>
     </div>

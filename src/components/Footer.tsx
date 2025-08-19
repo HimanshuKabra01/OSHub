@@ -47,7 +47,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link to="/guidelines" className="hover:text-emerald-400 transition-colors">
-                  Contribution Guidelines
+                  Guidelines
                 </Link>
               </li>
               <li>

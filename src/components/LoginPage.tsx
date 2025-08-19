@@ -7,20 +7,34 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Github, Mail, Terminal, Eye, EyeOff } from "lucide-react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import authService from "@/services/authService"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [showPassword, setShowPassword] = useState(false) // Toggle state
+  const [showPassword, setShowPassword] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState("")
+  const navigate = useNavigate()
+
+  const handleLogin = async () => {
+    setLoading(true)
+    setError("")
+
+    const result = await authService.signIn(email, password)
+
+    if (result.success) {
+      navigate("/dashboard")
+    } else {
+      setError(result.message)
+    }
+
+    setLoading(false)
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-slate-900 flex items-center justify-center p-4">
-      {/* Background Effects */}
-      <div className="absolute inset-0 bg-gradient-to-r from-emerald-900/10 to-blue-900/10 blur-3xl"></div>
-      <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-emerald-500/5 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl"></div>
-
       <Card className="w-full max-w-md bg-gradient-to-br from-gray-800/50 to-gray-900/50 border-gray-700/50 backdrop-blur-sm relative z-10">
         <CardHeader className="text-center">
           <Link to="/" className="mx-auto mb-4 flex items-center space-x-2">
@@ -33,31 +47,9 @@ export default function LoginPage() {
           <CardDescription className="text-gray-400">Access your developer account</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <Button
-              variant="outline"
-              className="w-full border-gray-600 text-gray-300 hover:bg-gray-700/50 bg-transparent"
-            >
-              <Github className="mr-2 h-4 w-4" />
-              GitHub
-            </Button>
-            <Button
-              variant="outline"
-              className="w-full border-gray-600 text-gray-300 hover:bg-gray-700/50 bg-transparent"
-            >
-              <Mail className="mr-2 h-4 w-4" />
-              Google
-            </Button>
-          </div>
 
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t border-gray-700" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-gray-800 px-2 text-gray-400">Or continue with email</span>
-            </div>
-          </div>
+          {/* error message */}
+          {error && <p className="text-red-500 text-sm text-center">{error}</p>}
 
           <div className="space-y-4">
             <div className="space-y-2">
@@ -80,13 +72,12 @@ export default function LoginPage() {
               </Label>
               <Input
                 id="password"
-                type={showPassword ? "text" : "password"} // toggle type
+                type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="bg-gray-800/50 border-gray-700 text-white placeholder:text-gray-400 focus:border-emerald-500 pr-10"
                 required
               />
-              {/* Eye Icon */}
               <div
                 className="absolute right-3 top-[60%] -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-200"
                 onClick={() => setShowPassword(!showPassword)}
@@ -94,19 +85,15 @@ export default function LoginPage() {
                 {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
               </div>
             </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox id="remember" className="border-gray-600" />
-              <Label htmlFor="remember" className="text-sm text-gray-300">
-                Keep me signed in
-              </Label>
-            </div>
           </div>
 
           <Button
+            onClick={handleLogin}
+            disabled={loading}
             className="w-full bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-700 hover:to-blue-700"
             size="lg"
           >
-            Sign In
+            {loading ? "Signing in..." : "Sign In"}
           </Button>
 
           <div className="text-center text-sm">

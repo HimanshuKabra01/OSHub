@@ -38,7 +38,7 @@ export default function BountyDetailsPage() {
     issueType: "Bug Fix",
     claimCount: 3,
     starred: 12,
-    deadline: "2024-02-15",
+    deadline: "2025-08-01",
     priority: "High",
     requirements:
       "• Maintain existing functionality\n• Implement proper cleanup in useEffect\n• Add comprehensive unit tests\n• Document the solution approach\n• Ensure no performance regression\n• Follow React best practices",
