@@ -26,7 +26,7 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
-    "@types/postcss-load-config": "^2.0.1",
+    "@types/postcss-load-config": "^3.0.1",
     "@types/react": "^18.2.45",
     "@types/react-dom": "^18.2.18",
     "@types/tailwindcss": "^3.0.11",
