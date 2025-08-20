@@ -1,6 +1,6 @@
-import { Button } from "@/components/ui/button"
-import { Terminal } from "lucide-react"
-import { Link } from "react-router-dom"
+import { Button } from "@/components/ui/button";
+import { Terminal } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function Navbar() {
   return (
@@ -16,22 +16,28 @@ export default function Navbar() {
             </Link>
           </div>
           <div className="flex items-center space-x-4">
-
             <Link to="/guidelines">
-            <Button variant="ghost" className="text-gray-300 hover:bg-gray-800/50 hover:text-white">
+              <Button
+                variant="ghost"
+                className="text-gray-300 hover:bg-gray-800/50 hover:text-white"
+              >
                 Guide
-            </Button>
-            
+              </Button>
             </Link>
 
-
             <Link to="/browse">
-              <Button variant="ghost" className="text-gray-300 hover:bg-gray-800/50 hover:text-white">
+              <Button
+                variant="ghost"
+                className="text-gray-300 hover:bg-gray-800/50 hover:text-white"
+              >
                 Browse Issues
               </Button>
             </Link>
             <Link to="/create">
-              <Button variant="ghost" className="text-gray-300 hover:bg-gray-800/50 hover:text-white">
+              <Button
+                variant="ghost"
+                className="text-gray-300 hover:bg-gray-800/50 hover:text-white"
+              >
                 Post Bounty
               </Button>
             </Link>
@@ -52,5 +58,5 @@ export default function Navbar() {
         </div>
       </div>
     </nav>
-  )
+  );
 }

@@ -1,10 +1,31 @@
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { IndianRupee, Clock, Search, Star, MessageSquare, TrendingUp, Filter, SortAsc } from "lucide-react"
-import { Link } from "react-router-dom"
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  IndianRupee,
+  Clock,
+  Search,
+  Star,
+  MessageSquare,
+  TrendingUp,
+  Filter,
+  SortAsc,
+} from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function BrowsePage() {
   const bounties = [
@@ -92,7 +113,7 @@ export default function BrowsePage() {
       starred: 11,
       priority: "Low",
     },
-  ]
+  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-slate-900">
@@ -101,9 +122,13 @@ export default function BrowsePage() {
         <div className="mb-8 text-center">
           <h1 className="text-4xl font-bold text-white mb-4">
             Active{" "}
-            <span className="bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent">Issues</span>
+            <span className="bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent">
+              Issues
+            </span>
           </h1>
-          <p className="text-gray-300 text-lg">Browse technical challenges and contribute to open source projects</p>
+          <p className="text-gray-300 text-lg">
+            Browse technical challenges and contribute to open source projects
+          </p>
         </div>
 
         {/* Filters */}
@@ -158,25 +183,33 @@ export default function BrowsePage() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
           <Card className="bg-gradient-to-r from-emerald-500/10 to-blue-500/10 border-emerald-500/20 backdrop-blur-sm">
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-emerald-400 font-mono">24</div>
+              <div className="text-2xl font-bold text-emerald-400 font-mono">
+                24
+              </div>
               <div className="text-sm text-gray-300">Active Issues</div>
             </CardContent>
           </Card>
           <Card className="bg-gradient-to-r from-green-500/10 to-emerald-500/10 border-green-500/20 backdrop-blur-sm">
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-green-400 font-mono">₹2.4L</div>
+              <div className="text-2xl font-bold text-green-400 font-mono">
+                ₹2.4L
+              </div>
               <div className="text-sm text-gray-300">Total Bounties</div>
             </CardContent>
           </Card>
           <Card className="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border-blue-500/20 backdrop-blur-sm">
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-blue-400 font-mono">156</div>
+              <div className="text-2xl font-bold text-blue-400 font-mono">
+                156
+              </div>
               <div className="text-sm text-gray-300">Online Developers</div>
             </CardContent>
           </Card>
           <Card className="bg-gradient-to-r from-orange-500/10 to-red-500/10 border-orange-500/20 backdrop-blur-sm">
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-orange-400 font-mono">3</div>
+              <div className="text-2xl font-bold text-orange-400 font-mono">
+                3
+              </div>
               <div className="text-sm text-gray-300">Critical Priority</div>
             </CardContent>
           </Card>
@@ -192,17 +225,27 @@ export default function BrowsePage() {
               <CardHeader>
                 <div className="flex justify-between items-start mb-3">
                   <div className="flex items-center space-x-2">
-                    <Badge variant="secondary" className="bg-gray-700 text-gray-300 font-mono text-xs">
+                    <Badge
+                      variant="secondary"
+                      className="bg-gray-700 text-gray-300 font-mono text-xs"
+                    >
                       {bounty.language}
                     </Badge>
-                    <Badge variant="outline" className="border-gray-600 text-gray-400 text-xs">
+                    <Badge
+                      variant="outline"
+                      className="border-gray-600 text-gray-400 text-xs"
+                    >
                       {bounty.issueType}
                     </Badge>
                     {bounty.priority === "Critical" && (
-                      <Badge className="bg-gradient-to-r from-red-600 to-red-500 text-white text-xs">CRITICAL</Badge>
+                      <Badge className="bg-gradient-to-r from-red-600 to-red-500 text-white text-xs">
+                        CRITICAL
+                      </Badge>
                     )}
                     {bounty.priority === "High" && (
-                      <Badge className="bg-gradient-to-r from-orange-600 to-orange-500 text-white text-xs">HIGH</Badge>
+                      <Badge className="bg-gradient-to-r from-orange-600 to-orange-500 text-white text-xs">
+                        HIGH
+                      </Badge>
                     )}
                   </div>
                   <div className="flex items-center text-emerald-400 font-bold text-lg font-mono">
@@ -280,5 +323,5 @@ export default function BrowsePage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

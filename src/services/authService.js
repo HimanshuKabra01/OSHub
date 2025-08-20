@@ -1,16 +1,15 @@
 // src/services/authService.js
-import { 
-  createUserWithEmailAndPassword, 
-  signInWithEmailAndPassword, 
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
   sendEmailVerification,
   signOut,
-  onAuthStateChanged
+  onAuthStateChanged,
 } from "firebase/auth";
 import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
 import { auth, db } from "../firebase.js";
 
 class AuthService {
-  
   /**
    * Sign up a new user with email and password
    * @param {string} email - User's email
@@ -19,19 +18,23 @@ class AuthService {
    * @param {string} accountType - Type of account (e.g., 'student', 'teacher', 'admin')
    * @returns {Promise<Object>} - Success/error response
    */
-  async signUp(email, password, name, accountType = 'user') {
+  async signUp(email, password, name, accountType = "user") {
     try {
       // Validate input
       if (!email || !password || !name) {
-        throw new Error('Email, password, and name are required');
+        throw new Error("Email, password, and name are required");
       }
 
       if (password.length < 6) {
-        throw new Error('Password should be at least 6 characters long');
+        throw new Error("Password should be at least 6 characters long");
       }
 
       // Create user with Firebase Auth
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
       const user = userCredential.user;
 
       // Send email verification
@@ -44,24 +47,24 @@ class AuthService {
         accountType,
         emailVerified: false,
         createdAt: serverTimestamp(),
-        lastLoginAt: null
+        lastLoginAt: null,
       });
 
       return {
         success: true,
-        message: 'Account created successfully! Please check your email to verify your account.',
+        message:
+          "Account created successfully! Please check your email to verify your account.",
         user: {
           uid: user.uid,
           email: user.email,
-          emailVerified: user.emailVerified
-        }
+          emailVerified: user.emailVerified,
+        },
       };
-
     } catch (error) {
-      console.error('Sign up error:', error);
+      console.error("Sign up error:", error);
       return {
         success: false,
-        message: this.getErrorMessage(error)
+        message: this.getErrorMessage(error),
       };
     }
   }
@@ -76,41 +79,46 @@ class AuthService {
     try {
       // Validate input
       if (!email || !password) {
-        throw new Error('Email and password are required');
+        throw new Error("Email and password are required");
       }
 
       // Sign in with Firebase Auth
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
       const user = userCredential.user;
 
       // Check if email is verified
       if (!user.emailVerified) {
         // Sign out the user immediately
         await signOut(auth);
-        throw new Error('Please verify your email before logging in. Check your inbox for the verification link.');
+        throw new Error(
+          "Please verify your email before logging in. Check your inbox for the verification link.",
+        );
       }
 
       // Update last login time in Firestore
       await this.updateUserDocument(user.uid, {
         lastLoginAt: serverTimestamp(),
-        emailVerified: true
+        emailVerified: true,
       });
 
       return {
         success: true,
-        message: 'Login successful!',
+        message: "Login successful!",
         user: {
           uid: user.uid,
           email: user.email,
-          emailVerified: user.emailVerified
-        }
+          emailVerified: user.emailVerified,
+        },
       };
-
     } catch (error) {
-      console.error('Sign in error:', error);
+      console.error("Sign in error:", error);
       return {
         success: false,
-        message: this.getErrorMessage(error)
+        message: this.getErrorMessage(error),
       };
     }
   }
@@ -124,13 +132,13 @@ class AuthService {
       await signOut(auth);
       return {
         success: true,
-        message: 'Signed out successfully'
+        message: "Signed out successfully",
       };
     } catch (error) {
-      console.error('Sign out error:', error);
+      console.error("Sign out error:", error);
       return {
         success: false,
-        message: 'Error signing out'
+        message: "Error signing out",
       };
     }
   }
@@ -143,23 +151,23 @@ class AuthService {
     try {
       const user = auth.currentUser;
       if (!user) {
-        throw new Error('No user is currently signed in');
+        throw new Error("No user is currently signed in");
       }
 
       if (user.emailVerified) {
-        throw new Error('Email is already verified');
+        throw new Error("Email is already verified");
       }
 
       await sendEmailVerification(user);
       return {
         success: true,
-        message: 'Verification email sent! Please check your inbox.'
+        message: "Verification email sent! Please check your inbox.",
       };
     } catch (error) {
-      console.error('Resend verification error:', error);
+      console.error("Resend verification error:", error);
       return {
         success: false,
-        message: this.getErrorMessage(error)
+        message: this.getErrorMessage(error),
       };
     }
   }
@@ -171,10 +179,10 @@ class AuthService {
    */
   async createUserDocument(uid, userData) {
     try {
-      const userRef = doc(db, 'users', uid);
+      const userRef = doc(db, "users", uid);
       await setDoc(userRef, userData);
     } catch (error) {
-      console.error('Error creating user document:', error);
+      console.error("Error creating user document:", error);
       throw error;
     }
   }
@@ -186,10 +194,10 @@ class AuthService {
    */
   async updateUserDocument(uid, updateData) {
     try {
-      const userRef = doc(db, 'users', uid);
+      const userRef = doc(db, "users", uid);
       await setDoc(userRef, updateData, { merge: true });
     } catch (error) {
-      console.error('Error updating user document:', error);
+      console.error("Error updating user document:", error);
       throw error;
     }
   }
@@ -201,16 +209,16 @@ class AuthService {
    */
   async getUserDocument(uid) {
     try {
-      const userRef = doc(db, 'users', uid);
+      const userRef = doc(db, "users", uid);
       const userSnap = await getDoc(userRef);
-      
+
       if (userSnap.exists()) {
         return userSnap.data();
       } else {
         return null;
       }
     } catch (error) {
-      console.error('Error getting user document:', error);
+      console.error("Error getting user document:", error);
       return null;
     }
   }
@@ -242,25 +250,27 @@ class AuthService {
     const errorMessage = error.message;
 
     switch (errorCode) {
-      case 'auth/email-already-in-use':
-        return 'An account with this email already exists.';
-      case 'auth/weak-password':
-        return 'Password is too weak. Please use at least 6 characters.';
-      case 'auth/invalid-email':
-        return 'Please enter a valid email address.';
-      case 'auth/user-not-found':
-        return 'No account found with this email address.';
-      case 'auth/wrong-password':
-        return 'Incorrect password. Please try again.';
-      case 'auth/too-many-requests':
-        return 'Too many failed attempts. Please try again later.';
-      case 'auth/network-request-failed':
-        return 'Network error. Please check your internet connection.';
-      case 'auth/invalid-credential':
-        return 'Invalid email or password.';
+      case "auth/email-already-in-use":
+        return "An account with this email already exists.";
+      case "auth/weak-password":
+        return "Password is too weak. Please use at least 6 characters.";
+      case "auth/invalid-email":
+        return "Please enter a valid email address.";
+      case "auth/user-not-found":
+        return "No account found with this email address.";
+      case "auth/wrong-password":
+        return "Incorrect password. Please try again.";
+      case "auth/too-many-requests":
+        return "Too many failed attempts. Please try again later.";
+      case "auth/network-request-failed":
+        return "Network error. Please check your internet connection.";
+      case "auth/invalid-credential":
+        return "Invalid email or password.";
       default:
         // Return custom error messages or fall back to Firebase message
-        return errorMessage || 'An unexpected error occurred. Please try again.';
+        return (
+          errorMessage || "An unexpected error occurred. Please try again."
+        );
     }
   }
 
@@ -283,20 +293,21 @@ class AuthService {
     if (password.length < 6) {
       return {
         isValid: false,
-        message: 'Password must be at least 6 characters long.'
+        message: "Password must be at least 6 characters long.",
       };
     }
 
     if (password.length < 8) {
       return {
         isValid: true,
-        message: 'Password is acceptable but consider using 8+ characters for better security.'
+        message:
+          "Password is acceptable but consider using 8+ characters for better security.",
       };
     }
 
     return {
       isValid: true,
-      message: 'Password strength is good.'
+      message: "Password strength is good.",
     };
   }
 }

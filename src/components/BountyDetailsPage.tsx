@@ -1,13 +1,19 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useParams } from "react-router-dom"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Textarea } from "@/components/ui/textarea"
-import { Separator } from "@/components/ui/separator"
+import { useState } from "react";
+import { useParams } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Textarea } from "@/components/ui/textarea";
+import { Separator } from "@/components/ui/separator";
 import {
   IndianRupee,
   Clock,
@@ -19,11 +25,11 @@ import {
   Award,
   Code,
   GitBranch,
-} from "lucide-react"
+} from "lucide-react";
 
 export default function BountyDetailsPage() {
-  const { id } = useParams()
-  const [isClaimed, setIsClaimed] = useState(false)
+  const { id } = useParams();
+  const [isClaimed, setIsClaimed] = useState(false);
 
   // Mock data - in real app, this would come from API
   const bounty = {
@@ -42,7 +48,14 @@ export default function BountyDetailsPage() {
     priority: "High",
     requirements:
       "• Maintain existing functionality\n• Implement proper cleanup in useEffect\n• Add comprehensive unit tests\n• Document the solution approach\n• Ensure no performance regression\n• Follow React best practices",
-    tags: ["React", "JavaScript", "Memory Management", "Hooks", "WebSocket", "Performance"],
+    tags: [
+      "React",
+      "JavaScript",
+      "Memory Management",
+      "Hooks",
+      "WebSocket",
+      "Performance",
+    ],
     author: {
       name: "Rajesh Kumar",
       avatar: "/placeholder.svg?height=40&width=40",
@@ -77,7 +90,7 @@ export default function BountyDetailsPage() {
         estimatedTime: "1-2 hours",
       },
     ],
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-slate-900">
@@ -90,10 +103,16 @@ export default function BountyDetailsPage() {
               <CardHeader>
                 <div className="flex justify-between items-start mb-4">
                   <div className="flex items-center space-x-2">
-                    <Badge variant="secondary" className="bg-gray-700 text-gray-300 font-mono text-xs">
+                    <Badge
+                      variant="secondary"
+                      className="bg-gray-700 text-gray-300 font-mono text-xs"
+                    >
                       {bounty.language}
                     </Badge>
-                    <Badge variant="outline" className="border-gray-600 text-gray-400 text-xs">
+                    <Badge
+                      variant="outline"
+                      className="border-gray-600 text-gray-400 text-xs"
+                    >
                       {bounty.issueType}
                     </Badge>
                     <Badge
@@ -125,7 +144,9 @@ export default function BountyDetailsPage() {
                     {bounty.bounty.toLocaleString()}
                   </div>
                 </div>
-                <CardTitle className="text-white text-2xl font-semibold">{bounty.title}</CardTitle>
+                <CardTitle className="text-white text-2xl font-semibold">
+                  {bounty.title}
+                </CardTitle>
                 <div className="flex items-center space-x-4 text-sm text-gray-400">
                   <div className="flex items-center">
                     <Clock className="h-4 w-4 mr-1" />
@@ -147,15 +168,21 @@ export default function BountyDetailsPage() {
                     <Code className="h-4 w-4 mr-2 text-emerald-400" />
                     Technical Description
                   </h3>
-                  <p className="text-gray-300 whitespace-pre-line mb-4 leading-relaxed">{bounty.description}</p>
+                  <p className="text-gray-300 whitespace-pre-line mb-4 leading-relaxed">
+                    {bounty.description}
+                  </p>
 
                   <h3 className="text-lg font-semibold mb-2 text-white flex items-center">
                     <GitBranch className="h-4 w-4 mr-2 text-emerald-400" />
                     Acceptance Criteria
                   </h3>
-                  <p className="text-gray-300 whitespace-pre-line mb-4 leading-relaxed">{bounty.requirements}</p>
+                  <p className="text-gray-300 whitespace-pre-line mb-4 leading-relaxed">
+                    {bounty.requirements}
+                  </p>
 
-                  <h3 className="text-lg font-semibold mb-2 text-white">Technology Stack</h3>
+                  <h3 className="text-lg font-semibold mb-2 text-white">
+                    Technology Stack
+                  </h3>
                   <div className="flex flex-wrap gap-2">
                     {bounty.tags.map((tag) => (
                       <Badge
@@ -186,22 +213,30 @@ export default function BountyDetailsPage() {
                   <div key={claim.id}>
                     <div className="flex items-start space-x-4">
                       <Avatar className="border-2 border-emerald-500/30">
-                        <AvatarImage src={claim.developer.avatar || "/placeholder.svg"} alt={claim.developer.name} />
+                        <AvatarImage
+                          src={claim.developer.avatar || "/placeholder.svg"}
+                          alt={claim.developer.name}
+                        />
                         <AvatarFallback className="bg-gray-700 text-white">
                           {claim.developer.name.charAt(0)}
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex-1">
                         <div className="flex items-center space-x-2 mb-1">
-                          <h4 className="font-semibold text-white">{claim.developer.name}</h4>
+                          <h4 className="font-semibold text-white">
+                            {claim.developer.name}
+                          </h4>
                           <Badge className="bg-gradient-to-r from-yellow-500/20 to-orange-500/20 text-yellow-400 border-yellow-500/30 text-xs">
                             ⭐ {claim.developer.reputation}
                           </Badge>
                           <span className="text-sm text-gray-400 font-mono">
-                            {claim.developer.completedBounties} bounties completed
+                            {claim.developer.completedBounties} bounties
+                            completed
                           </span>
                         </div>
-                        <p className="text-gray-300 mb-2 leading-relaxed">{claim.proposal}</p>
+                        <p className="text-gray-300 mb-2 leading-relaxed">
+                          {claim.proposal}
+                        </p>
                         <div className="flex items-center space-x-4 text-sm text-gray-400">
                           <span>Submitted {claim.timeSubmitted}</span>
                           <span>Est. completion: {claim.estimatedTime}</span>
@@ -215,7 +250,9 @@ export default function BountyDetailsPage() {
                         View Profile
                       </Button>
                     </div>
-                    {index < bounty.claims.length - 1 && <Separator className="my-4 bg-gray-700" />}
+                    {index < bounty.claims.length - 1 && (
+                      <Separator className="my-4 bg-gray-700" />
+                    )}
                   </div>
                 ))}
               </CardContent>
@@ -232,15 +269,24 @@ export default function BountyDetailsPage() {
               <CardContent>
                 <div className="flex items-center space-x-3">
                   <Avatar className="h-12 w-12 border-2 border-emerald-500/30">
-                    <AvatarImage src={bounty.author.avatar || "/placeholder.svg"} alt={bounty.author.name} />
-                    <AvatarFallback className="bg-gray-700 text-white">{bounty.author.name.charAt(0)}</AvatarFallback>
+                    <AvatarImage
+                      src={bounty.author.avatar || "/placeholder.svg"}
+                      alt={bounty.author.name}
+                    />
+                    <AvatarFallback className="bg-gray-700 text-white">
+                      {bounty.author.name.charAt(0)}
+                    </AvatarFallback>
                   </Avatar>
                   <div>
-                    <h4 className="font-semibold text-white">{bounty.author.name}</h4>
+                    <h4 className="font-semibold text-white">
+                      {bounty.author.name}
+                    </h4>
                     <div className="flex items-center space-x-2 text-sm text-gray-400">
                       <span>⭐ {bounty.author.reputation}</span>
                       <span>•</span>
-                      <span>{bounty.author.completedBounties} bounties posted</span>
+                      <span>
+                        {bounty.author.completedBounties} bounties posted
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -258,7 +304,9 @@ export default function BountyDetailsPage() {
               <CardContent className="space-y-4">
                 <div className="flex justify-between">
                   <span className="text-gray-300">Reward:</span>
-                  <span className="font-semibold text-emerald-400 font-mono">₹{bounty.bounty.toLocaleString()}</span>
+                  <span className="font-semibold text-emerald-400 font-mono">
+                    ₹{bounty.bounty.toLocaleString()}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-300">Deadline:</span>
@@ -329,22 +377,34 @@ export default function BountyDetailsPage() {
                 <div className="flex items-center space-x-3">
                   <Zap className="h-5 w-5 text-yellow-400" />
                   <div>
-                    <p className="text-white text-sm font-medium">Rapid Resolution</p>
-                    <p className="text-gray-400 text-xs">Expert developers available 24/7</p>
+                    <p className="text-white text-sm font-medium">
+                      Rapid Resolution
+                    </p>
+                    <p className="text-gray-400 text-xs">
+                      Expert developers available 24/7
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Shield className="h-5 w-5 text-blue-400" />
                   <div>
-                    <p className="text-white text-sm font-medium">Secure Escrow</p>
-                    <p className="text-gray-400 text-xs">Payment protection guaranteed</p>
+                    <p className="text-white text-sm font-medium">
+                      Secure Escrow
+                    </p>
+                    <p className="text-gray-400 text-xs">
+                      Payment protection guaranteed
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Award className="h-5 w-5 text-emerald-400" />
                   <div>
-                    <p className="text-white text-sm font-medium">Quality Assurance</p>
-                    <p className="text-gray-400 text-xs">Code review and testing included</p>
+                    <p className="text-white text-sm font-medium">
+                      Quality Assurance
+                    </p>
+                    <p className="text-gray-400 text-xs">
+                      Code review and testing included
+                    </p>
                   </div>
                 </div>
               </CardContent>
@@ -383,5 +443,5 @@ export default function BountyDetailsPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

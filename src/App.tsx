@@ -1,14 +1,16 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
-import Navbar from "./components/Navbar"
-import Footer from "./components/Footer"
-import HomePage from "./components/HomePage"
-import BrowsePage from "./components/BrowsePage"
-import CreatePage from "./components/CreatePage"
-import BountyDetailsPage from "./components/BountyDetailsPage"
-import LoginPage from "./components/LoginPage"
-import SignupPage from "./components/SignupPage"
-import ScrollToTop from "./components/ScrollToTop"
-import GuidePage from "./components/Guide"
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import HomePage from "./components/HomePage";
+import BrowsePage from "./components/BrowsePage";
+import CreatePage from "./components/CreatePage";
+import BountyDetailsPage from "./components/BountyDetailsPage";
+import LoginPage from "./components/LoginPage";
+import SignupPage from "./components/SignupPage";
+import ScrollToTop from "./components/ScrollToTop";
+import GuidePage from "./components/Guide";
+import PrivacyPage from "./components/PrivacyPage";
+import TermsPage from "./components/TermsPage";
 
 function App() {
   return (
@@ -61,17 +63,19 @@ function App() {
             element={
               <>
                 <Navbar />
-                <GuidePage/>
+                <GuidePage />
                 <Footer />
               </>
             }
           />
           <Route path="/auth/login" element={<LoginPage />} />
           <Route path="/auth/signup" element={<SignupPage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
+          <Route path="/terms" element={<TermsPage />} />
         </Routes>
       </div>
     </Router>
-  )
+  );
 }
 
-export default App
+export default App;

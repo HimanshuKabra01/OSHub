@@ -11,7 +11,7 @@ const firebaseConfig = {
   projectId: "oshub-de760",
   storageBucket: "oshub-de760.firebasestorage.app",
   messagingSenderId: "23604384593",
-  appId: "1:23604384593:web:e0a5c0f8f246a25abbf970"
+  appId: "1:23604384593:web:e0a5c0f8f246a25abbf970",
 };
 
 // Initialize Firebase

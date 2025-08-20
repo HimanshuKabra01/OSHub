@@ -1,37 +1,43 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Github, Mail, Terminal, Eye, EyeOff } from "lucide-react"
-import { Link, useNavigate } from "react-router-dom"
-import authService from "@/services/authService"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Github, Mail, Terminal, Eye, EyeOff } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import authService from "@/services/authService";
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [showPassword, setShowPassword] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState("")
-  const navigate = useNavigate()
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleLogin = async () => {
-    setLoading(true)
-    setError("")
+    setLoading(true);
+    setError("");
 
-    const result = await authService.signIn(email, password)
+    const result = await authService.signIn(email, password);
 
     if (result.success) {
-      navigate("/dashboard")
+      navigate("/dashboard");
     } else {
-      setError(result.message)
+      setError(result.message);
     }
 
-    setLoading(false)
-  }
+    setLoading(false);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-slate-900 flex items-center justify-center p-4">
@@ -44,10 +50,11 @@ export default function LoginPage() {
             </h1>
           </Link>
           <CardTitle className="text-2xl text-white">Developer Login</CardTitle>
-          <CardDescription className="text-gray-400">Access your developer account</CardDescription>
+          <CardDescription className="text-gray-400">
+            Access your developer account
+          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-
           {/* error message */}
           {error && <p className="text-red-500 text-sm text-center">{error}</p>}
 
@@ -82,7 +89,11 @@ export default function LoginPage() {
                 className="absolute right-3 top-[60%] -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-200"
                 onClick={() => setShowPassword(!showPassword)}
               >
-                {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                {showPassword ? (
+                  <EyeOff className="h-5 w-5" />
+                ) : (
+                  <Eye className="h-5 w-5" />
+                )}
               </div>
             </div>
           </div>
@@ -97,19 +108,25 @@ export default function LoginPage() {
           </Button>
 
           <div className="text-center text-sm">
-            <Link to="/auth/forgot-password" className="text-emerald-400 hover:text-emerald-300">
+            <Link
+              to="/auth/forgot-password"
+              className="text-emerald-400 hover:text-emerald-300"
+            >
               Forgot your password?
             </Link>
           </div>
 
           <div className="text-center text-sm text-gray-400">
             New to OSHub?{" "}
-            <Link to="/auth/signup" className="text-emerald-400 hover:text-emerald-300">
+            <Link
+              to="/auth/signup"
+              className="text-emerald-400 hover:text-emerald-300"
+            >
               Create account
             </Link>
           </div>
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

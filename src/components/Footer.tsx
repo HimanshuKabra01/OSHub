@@ -1,5 +1,5 @@
-import { Terminal } from "lucide-react"
-import { Link } from "react-router-dom"
+import { Terminal } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function Footer() {
   return (
@@ -14,24 +14,34 @@ export default function Footer() {
               </h3>
             </div>
             <p className="text-gray-400">
-              Professional bounty platform for open source development and technical problem solving.
+              Professional bounty platform for open source development and
+              technical problem solving.
             </p>
           </div>
           <div>
             <h4 className="font-semibold mb-4 text-white">Platform</h4>
             <ul className="space-y-2 text-gray-400">
               <li>
-                <Link to="/browse" className="hover:text-emerald-400 transition-colors">
+                <Link
+                  to="/browse"
+                  className="hover:text-emerald-400 transition-colors"
+                >
                   Browse Issues
                 </Link>
               </li>
               <li>
-                <Link to="/create" className="hover:text-emerald-400 transition-colors">
+                <Link
+                  to="/create"
+                  className="hover:text-emerald-400 transition-colors"
+                >
                   Post Bounty
                 </Link>
               </li>
               <li>
-                <Link to="/leaderboard" className="hover:text-emerald-400 transition-colors">
+                <Link
+                  to="/leaderboard"
+                  className="hover:text-emerald-400 transition-colors"
+                >
                   Developer Rankings
                 </Link>
               </li>
@@ -41,17 +51,26 @@ export default function Footer() {
             <h4 className="font-semibold mb-4 text-white">Resources</h4>
             <ul className="space-y-2 text-gray-400">
               <li>
-                <Link to="/docs" className="hover:text-emerald-400 transition-colors">
+                <Link
+                  to="/docs"
+                  className="hover:text-emerald-400 transition-colors"
+                >
                   API Documentation
                 </Link>
               </li>
               <li>
-                <Link to="/guidelines" className="hover:text-emerald-400 transition-colors">
+                <Link
+                  to="/guidelines"
+                  className="hover:text-emerald-400 transition-colors"
+                >
                   Guidelines
                 </Link>
               </li>
               <li>
-                <Link to="/blog" className="hover:text-emerald-400 transition-colors">
+                <Link
+                  to="/blog"
+                  className="hover:text-emerald-400 transition-colors"
+                >
                   Developer Blog
                 </Link>
               </li>
@@ -61,17 +80,26 @@ export default function Footer() {
             <h4 className="font-semibold mb-4 text-white">Support</h4>
             <ul className="space-y-2 text-gray-400">
               <li>
-                <Link to="/help" className="hover:text-emerald-400 transition-colors">
+                <Link
+                  to="/help"
+                  className="hover:text-emerald-400 transition-colors"
+                >
                   Help Center
                 </Link>
               </li>
               <li>
-                <Link to="/terms" className="hover:text-emerald-400 transition-colors">
+                <Link
+                  to="/terms"
+                  className="hover:text-emerald-400 transition-colors"
+                >
                   Terms of Service
                 </Link>
               </li>
               <li>
-                <Link to="/privacy" className="hover:text-emerald-400 transition-colors">
+                <Link
+                  to="/privacy"
+                  className="hover:text-emerald-400 transition-colors"
+                >
                   Privacy Policy
                 </Link>
               </li>
@@ -83,5 +111,5 @@ export default function Footer() {
         </div>
       </div>
     </footer>
-  )
+  );
 }
