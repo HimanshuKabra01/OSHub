@@ -1,15 +1,15 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Github, Mail, Terminal, Eye, EyeOff } from "lucide-react"
-import { Link } from "react-router-dom"
-import AuthService from "@/services/authService"   // ✅ import your AuthService
+import { Terminal, Eye, EyeOff, CheckCircle } from "lucide-react"
+import { Link, useNavigate } from "react-router-dom"
+import AuthService from "@/services/authService"
 
 export default function SignupPage() {
   const [formData, setFormData] = useState({
@@ -24,8 +24,27 @@ export default function SignupPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [success, setSuccess] = useState<string | null>(null)
+  const [error, setError] = useState("")
+  const [success, setSuccess] = useState("")
+  const [termsAccepted, setTermsAccepted] = useState(false)
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    const checkAuthStatus = async () => {
+      if (AuthService.isAuthenticated()) {
+        const storedUser = AuthService.getStoredUserData()
+        if (storedUser && storedUser.emailVerified) {
+          navigate("/dashboard")
+          return
+        }
+      }
+      await AuthService.initializeAuth()
+      if (AuthService.isAuthenticated()) {
+        navigate("/dashboard")
+      }
+    }
+    checkAuthStatus()
+  }, [navigate])
 
   const updateFormData = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
@@ -33,11 +52,24 @@ export default function SignupPage() {
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault()
-    setError(null)
-    setSuccess(null)
+    setError("")
+    setSuccess("")
 
+    if (!termsAccepted) {
+      setError("Please accept the Terms of Service and Privacy Policy")
+      return
+    }
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match")
+      return
+    }
+    if (!formData.userType) {
+      setError("Please select an account type")
+      return
+    }
+    const passwordValidation = AuthService.validatePassword(formData.password)
+    if (!passwordValidation.isValid) {
+      setError(passwordValidation.message)
       return
     }
 
@@ -47,15 +79,27 @@ export default function SignupPage() {
         formData.email,
         formData.password,
         `${formData.firstName} ${formData.lastName}`,
-        formData.userType || "user"
+        formData.userType
       )
 
       if (response.success) {
         setSuccess(response.message)
+        console.log("User registered:", response.user)
+        setFormData({
+          firstName: "",
+          lastName: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+          userType: "",
+        })
+        setTermsAccepted(false)
+        setTimeout(() => navigate("/auth/verify-email"), 3000)
       } else {
         setError(response.message)
       }
-    } catch (err: any) {
+    } catch (err) {
+      console.error("Signup error:", err)
       setError("Something went wrong. Please try again.")
     } finally {
       setLoading(false)
@@ -65,9 +109,9 @@ export default function SignupPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-slate-900 flex items-center justify-center p-4">
       {/* Background Effects */}
-      <div className="absolute inset-0 bg-gradient-to-r from-emerald-900/10 to-blue-900/10 blur-3xl"></div>
-      <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-emerald-500/5 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-emerald-900/10 to-blue-900/10 blur-3xl" />
+      <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-emerald-500/5 rounded-full blur-3xl" />
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl" />
 
       <Card className="w-full max-w-md bg-gradient-to-br from-gray-800/50 to-gray-900/50 border-gray-700/50 backdrop-blur-sm relative z-10">
         <CardHeader className="text-center">
@@ -82,8 +126,24 @@ export default function SignupPage() {
             Connect with the developer community and start earning bounties
           </CardDescription>
         </CardHeader>
+
         <CardContent>
           <form className="space-y-4" onSubmit={handleSignup}>
+            {/* Success */}
+            {success && (
+              <div className="bg-green-500/10 border border-green-500/20 text-green-400 px-3 py-2 rounded-md text-sm flex items-center">
+                <CheckCircle className="h-4 w-4 mr-2" />
+                {success}
+              </div>
+            )}
+
+            {/* Error */}
+            {error && (
+              <div className="bg-red-500/10 border border-red-500/20 text-red-400 px-3 py-2 rounded-md text-sm">
+                {error}
+              </div>
+            )}
+
             {/* Names */}
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
@@ -95,7 +155,7 @@ export default function SignupPage() {
                   placeholder="Rajesh"
                   value={formData.firstName}
                   onChange={(e) => updateFormData("firstName", e.target.value)}
-                  className="bg-gray-800/50 border-gray-700 text-white"
+                  className="bg-gray-800/50 border-gray-700 text-white placeholder:text-gray-400 focus:border-emerald-500"
                   required
                 />
               </div>
@@ -108,7 +168,7 @@ export default function SignupPage() {
                   placeholder="Kumar"
                   value={formData.lastName}
                   onChange={(e) => updateFormData("lastName", e.target.value)}
-                  className="bg-gray-800/50 border-gray-700 text-white"
+                  className="bg-gray-800/50 border-gray-700 text-white placeholder:text-gray-400 focus:border-emerald-500"
                   required
                 />
               </div>
@@ -125,7 +185,7 @@ export default function SignupPage() {
                 placeholder="developer@example.com"
                 value={formData.email}
                 onChange={(e) => updateFormData("email", e.target.value)}
-                className="bg-gray-800/50 border-gray-700 text-white"
+                className="bg-gray-800/50 border-gray-700 text-white placeholder:text-gray-400 focus:border-emerald-500"
                 required
               />
             </div>
@@ -135,10 +195,7 @@ export default function SignupPage() {
               <Label htmlFor="userType" className="text-white font-medium">
                 Account Type
               </Label>
-              <Select
-                value={formData.userType}
-                onValueChange={(value) => updateFormData("userType", value)}
-              >
+              <Select value={formData.userType} onValueChange={(v) => updateFormData("userType", v)}>
                 <SelectTrigger className="bg-gray-800/50 border-gray-700 text-white">
                   <SelectValue placeholder="Select your role" />
                 </SelectTrigger>
@@ -160,7 +217,7 @@ export default function SignupPage() {
                 type={showPassword ? "text" : "password"}
                 value={formData.password}
                 onChange={(e) => updateFormData("password", e.target.value)}
-                className="bg-gray-800/50 border-gray-700 text-white pr-10"
+                className="bg-gray-800/50 border-gray-700 text-white placeholder:text-gray-400 focus:border-emerald-500 pr-10"
                 required
               />
               <div
@@ -181,7 +238,7 @@ export default function SignupPage() {
                 type={showConfirmPassword ? "text" : "password"}
                 value={formData.confirmPassword}
                 onChange={(e) => updateFormData("confirmPassword", e.target.value)}
-                className="bg-gray-800/50 border-gray-700 text-white pr-10"
+                className="bg-gray-800/50 border-gray-700 text-white placeholder:text-gray-400 focus:border-emerald-500 pr-10"
                 required
               />
               <div
@@ -193,9 +250,15 @@ export default function SignupPage() {
             </div>
 
             {/* Terms */}
-            <div className="flex items-center space-x-2">
-              <Checkbox id="terms" className="border-gray-600" required />
-              <Label htmlFor="terms" className="text-sm text-gray-300">
+            <div className="flex items-start space-x-2">
+              <Checkbox
+                id="terms"
+                className="border-gray-600 mt-1"
+                checked={termsAccepted}
+                onCheckedChange={setTermsAccepted}
+                required
+              />
+              <Label htmlFor="terms" className="text-sm text-gray-300 leading-5">
                 I agree to the{" "}
                 <Link to="/terms" className="text-emerald-400 hover:text-emerald-300">
                   Terms of Service
@@ -207,10 +270,6 @@ export default function SignupPage() {
               </Label>
             </div>
 
-            {/* Error / Success */}
-            {error && <p className="text-red-400 text-sm">{error}</p>}
-            {success && <p className="text-green-400 text-sm">{success}</p>}
-
             {/* Submit */}
             <Button
               type="submit"
@@ -218,7 +277,7 @@ export default function SignupPage() {
               size="lg"
               disabled={loading}
             >
-              {loading ? "Creating Account..." : "Create Developer Account"}
+              {loading ? "Creating Account..." : "Create Account"}
             </Button>
 
             <div className="text-center text-sm text-gray-400">
