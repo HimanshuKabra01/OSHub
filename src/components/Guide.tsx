@@ -1,6 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { BookOpen, Workflow, Rocket, CheckCircle2, ClipboardCheck, Coins, GitPullRequest, Search, HelpCircle } from "lucide-react"
+import { Workflow, Rocket, CheckCircle2, ClipboardCheck, Coins, GitPullRequest, Search, HelpCircle, Zap, Shield, Target, Code, Users, Award } from "lucide-react"
 import { useEffect } from "react"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
@@ -30,32 +29,91 @@ export default function GuidePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-slate-900">
-      {/* Hero */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-emerald-900/10 to-blue-900/10 blur-3xl"></div>
-        <div className="absolute top-1/3 left-1/4 w-72 h-72 bg-emerald-500/5 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl"></div>
+      <section className="relative w-full min-h-screen px-4 sm:px-8 md:px-12 py-12 flex items-center justify-center text-center fade-up">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-white mb-4">Development Workflow</h2>
+            <p className="text-gray-300 text-lg">Professional bounty-driven development process</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="text-center group">
+              <div className="bg-gradient-to-br from-emerald-500/10 to-blue-500/10 rounded-lg p-6 w-20 h-20 mx-auto mb-6 flex items-center justify-center group-hover:scale-105 transition-transform duration-300 border border-emerald-500/20">
+                <Code className="h-10 w-10 text-emerald-400" />
+              </div>
+              <h3 className="text-2xl font-semibold mb-4 text-white">1. Issue Specification</h3>
+              <p className="text-gray-300 leading-relaxed">
+                Define technical requirements, acceptance criteria, and bounty amount. Provide comprehensive
+                documentation and reproduction steps for developers.
+              </p>
+            </div>
+            <div className="text-center group">
+              <div className="bg-gradient-to-br from-emerald-500/10 to-blue-500/10 rounded-lg p-6 w-20 h-20 mx-auto mb-6 flex items-center justify-center group-hover:scale-105 transition-transform duration-300 border border-emerald-500/20">
+                <Users className="h-10 w-10 text-emerald-400" />
+              </div>
+              <h3 className="text-2xl font-semibold mb-4 text-white">2. Developer Assignment</h3>
+              <p className="text-gray-300 leading-relaxed">
+                Experienced developers review requirements, submit proposals, and get assigned based on expertise and
+                track record. Transparent selection process.
+              </p>
+            </div>
+            <div className="text-center group">
+              <div className="bg-gradient-to-br from-emerald-500/10 to-blue-500/10 rounded-lg p-6 w-20 h-20 mx-auto mb-6 flex items-center justify-center group-hover:scale-105 transition-transform duration-300 border border-emerald-500/20">
+                <Award className="h-10 w-10 text-emerald-400" />
+              </div>
+              <h3 className="text-2xl font-semibold mb-4 text-white">3. Solution & Payment</h3>
+              <p className="text-gray-300 leading-relaxed">
+                Code review, testing, and validation process. Automatic bounty release upon successful merge and
+                acceptance. Quality-assured deliverables.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
 
-        <div className="max-w-3xl mx-auto text-center relative z-10">
-          <Badge className="bg-gradient-to-r from-emerald-500/10 to-blue-500/10 text-emerald-300 border-emerald-500/20 mb-4">
-            <BookOpen className="h-4 w-4 mr-1" />
-            Developer Guide
-          </Badge>
-          <h1 className="text-5xl font-bold text-white mb-6 leading-tight">
-            Master the{" "}
-            <span className="bg-gradient-to-r from-emerald-400 via-blue-400 to-emerald-400 bg-clip-text text-transparent">
-              Bounty Workflow
-            </span>
-          </h1>
-          <p className="text-lg text-gray-300 leading-relaxed">
-            Learn how to post issues, claim bounties, and contribute effectively.
-            This guide walks you through every step.
-          </p>
+      <section className="relative w-full min-h-screen px-4 sm:px-8 md:px-12 py-12 flex items-center justify-center text-center bg-black/10">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-white mb-4">Platform Features</h2>
+            <p className="text-gray-300 text-lg">Built for professional software development</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[
+              {
+                icon: Zap,
+                title: "Rapid Deployment",
+                description:
+                  "Fast-track critical fixes with priority queuing. Get production issues resolved within hours by expert developers.",
+              },
+              {
+                icon: Shield,
+                title: "Escrow Protection",
+                description:
+                  "Secure payment system with milestone-based releases. Funds held in escrow until successful delivery and acceptance.",
+              },
+              {
+                icon: Target,
+                title: "Code Quality Assurance",
+                description:
+                  "Mandatory code review, testing, and documentation. All solutions meet industry standards and best practices.",
+              },
+            ].map((feature, index) => (
+              <Card
+                key={index}
+                className="bg-gradient-to-br from-gray-800/30 to-gray-900/30 border-gray-700/50 hover:border-emerald-500/30 transition-all duration-300 backdrop-blur-sm"
+              >
+                <CardContent className="p-6 text-center">
+                  <feature.icon className="h-12 w-12 text-emerald-400 mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold text-white mb-2">{feature.title}</h3>
+                  <p className="text-gray-400 leading-relaxed">{feature.description}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Maintainer Guide */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 fade-up">
+      <section className="relative w-full min-h-screen px-4 sm:px-8 md:px-12 py-12 flex items-center justify-center text-center fade-up">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-3xl font-bold text-white mb-8 text-center">Maintainer’s Guide</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -80,7 +138,7 @@ export default function GuidePage() {
       </section>
 
       {/* Contributor Guide */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 fade-up bg-black/10 backdrop-blur-sm">
+      <section className="relative w-full min-h-screen px-4 sm:px-8 md:px-12 py-12 flex items-center justify-center text-center bg-black/10">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-3xl font-bold text-white mb-8 text-center">Contributor’s Guide</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

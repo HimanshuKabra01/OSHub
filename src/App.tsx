@@ -205,6 +205,64 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-gray-900 to-slate-900">
         <div className="text-white text-lg">Loading...</div>
+    <Router>
+      <ScrollToTop />
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-slate-900">
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <>
+                <Navbar />
+                <HomePage />
+              </>
+            }
+          />
+          <Route
+            path="/browse"
+            element={
+              <>
+                <Navbar />
+                <BrowsePage />
+                <Footer />
+              </>
+            }
+          />
+          <Route
+            path="/create"
+            element={
+              <>
+                <Navbar />
+                <CreatePage />
+                <Footer />
+              </>
+            }
+          />
+          <Route
+            path="/bounty/:id"
+            element={
+              <>
+                <Navbar />
+                <BountyDetailsPage />
+                <Footer />
+              </>
+            }
+          />
+          <Route
+            path="/guidelines"
+            element={
+              <>
+                <Navbar />
+                <GuidePage />
+                <Footer />
+              </>
+            }
+          />
+          <Route path="/auth/login" element={<LoginPage />} />
+          <Route path="/auth/signup" element={<SignupPage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
+          <Route path="/terms" element={<TermsPage />} />
+        </Routes>
       </div>
     )
   }
