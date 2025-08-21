@@ -12,11 +12,58 @@ import { auth, db } from "../firebase.js";
 class AuthService {
   
   /**
+   * Store user data in localStorage
+   * @param {Object} userData - User data to store
+   */
+  storeUserData(userData) {
+    try {
+      localStorage.setItem('user', JSON.stringify(userData));
+      localStorage.setItem('isAuthenticated', 'true');
+    } catch (error) {
+      console.error('Error storing user data:', error);
+    }
+  }
+
+  /**
+   * Get user data from localStorage
+   * @returns {Object|null} - User data or null
+   */
+  getStoredUserData() {
+    try {
+      const userData = localStorage.getItem('user');
+      return userData ? JSON.parse(userData) : null;
+    } catch (error) {
+      console.error('Error getting stored user data:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Clear user data from localStorage
+   */
+  clearStoredUserData() {
+    try {
+      localStorage.removeItem('user');
+      localStorage.removeItem('isAuthenticated');
+    } catch (error) {
+      console.error('Error clearing stored user data:', error);
+    }
+  }
+
+  /**
+   * Check if user is authenticated (from localStorage)
+   * @returns {boolean}
+   */
+  isAuthenticated() {
+    return localStorage.getItem('isAuthenticated') === 'true';
+  }
+
+  /**
    * Sign up a new user with email and password
    * @param {string} email - User's email
    * @param {string} password - User's password
    * @param {string} name - User's display name
-   * @param {string} accountType - Type of account (e.g., 'student', 'teacher', 'admin')
+   * @param {string} accountType - Type of account (e.g., 'developer', 'client')
    * @returns {Promise<Object>} - Success/error response
    */
   async signUp(email, password, name, accountType = 'user') {
@@ -37,24 +84,37 @@ class AuthService {
       // Send email verification
       await sendEmailVerification(user);
 
-      // Store user data in Firestore
-      await this.createUserDocument(user.uid, {
+      // Prepare user data for Firestore
+      const userDocData = {
         email: email.toLowerCase(),
         name: name.trim(),
         accountType,
         emailVerified: false,
         createdAt: serverTimestamp(),
         lastLoginAt: null
-      });
+      };
+
+      // Store user data in Firestore
+      await this.createUserDocument(user.uid, userDocData);
+
+      // Prepare user data for localStorage (without serverTimestamp)
+      const userDataForStorage = {
+        uid: user.uid,
+        email: user.email,
+        name: name.trim(),
+        accountType,
+        emailVerified: user.emailVerified,
+        createdAt: new Date().toISOString(),
+        lastLoginAt: null
+      };
+
+      // Store user data in localStorage
+      this.storeUserData(userDataForStorage);
 
       return {
         success: true,
         message: 'Account created successfully! Please check your email to verify your account.',
-        user: {
-          uid: user.uid,
-          email: user.email,
-          emailVerified: user.emailVerified
-        }
+        user: userDataForStorage
       };
 
     } catch (error) {
@@ -90,20 +150,33 @@ class AuthService {
         throw new Error('Please verify your email before logging in. Check your inbox for the verification link.');
       }
 
+      // Get user document from Firestore
+      const userDoc = await this.getUserDocument(user.uid);
+
       // Update last login time in Firestore
       await this.updateUserDocument(user.uid, {
         lastLoginAt: serverTimestamp(),
         emailVerified: true
       });
 
+      // Prepare complete user data for localStorage
+      const userDataForStorage = {
+        uid: user.uid,
+        email: user.email,
+        name: userDoc?.name || '',
+        accountType: userDoc?.accountType || 'user',
+        emailVerified: user.emailVerified,
+        createdAt: userDoc?.createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
+        lastLoginAt: new Date().toISOString()
+      };
+
+      // Store user data in localStorage
+      this.storeUserData(userDataForStorage);
+
       return {
         success: true,
         message: 'Login successful!',
-        user: {
-          uid: user.uid,
-          email: user.email,
-          emailVerified: user.emailVerified
-        }
+        user: userDataForStorage
       };
 
     } catch (error) {
@@ -122,6 +195,10 @@ class AuthService {
   async signOut() {
     try {
       await signOut(auth);
+      
+      // Clear stored user data
+      this.clearStoredUserData();
+      
       return {
         success: true,
         message: 'Signed out successfully'
@@ -162,6 +239,44 @@ class AuthService {
         message: this.getErrorMessage(error)
       };
     }
+  }
+
+  /**
+   * Initialize auth state on app load
+   * Checks localStorage and syncs with Firebase auth state
+   */
+  async initializeAuth() {
+    return new Promise((resolve) => {
+      const storedUser = this.getStoredUserData();
+      const isAuthenticated = this.isAuthenticated();
+
+      // Listen for auth state changes
+      const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+        if (firebaseUser && firebaseUser.emailVerified) {
+          // User is signed in and verified
+          if (!storedUser || storedUser.uid !== firebaseUser.uid) {
+            // Sync with Firestore and update localStorage
+            const userDoc = await this.getUserDocument(firebaseUser.uid);
+            const userDataForStorage = {
+              uid: firebaseUser.uid,
+              email: firebaseUser.email,
+              name: userDoc?.name || '',
+              accountType: userDoc?.accountType || 'user',
+              emailVerified: firebaseUser.emailVerified,
+              createdAt: userDoc?.createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
+              lastLoginAt: userDoc?.lastLoginAt?.toDate?.()?.toISOString() || null
+            };
+            this.storeUserData(userDataForStorage);
+          }
+        } else {
+          // User is signed out or not verified
+          this.clearStoredUserData();
+        }
+        
+        unsubscribe();
+        resolve(firebaseUser);
+      });
+    });
   }
 
   /**
@@ -221,15 +336,42 @@ class AuthService {
    * @returns {Function} - Unsubscribe function
    */
   onAuthStateChange(callback) {
-    return onAuthStateChanged(auth, callback);
+    return onAuthStateChanged(auth, async (user) => {
+      if (user && user.emailVerified) {
+        // Sync with localStorage
+        const storedUser = this.getStoredUserData();
+        if (!storedUser || storedUser.uid !== user.uid) {
+          const userDoc = await this.getUserDocument(user.uid);
+          const userDataForStorage = {
+            uid: user.uid,
+            email: user.email,
+            name: userDoc?.name || '',
+            accountType: userDoc?.accountType || 'user',
+            emailVerified: user.emailVerified,
+            createdAt: userDoc?.createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
+            lastLoginAt: userDoc?.lastLoginAt?.toDate?.()?.toISOString() || null
+          };
+          this.storeUserData(userDataForStorage);
+        }
+      } else {
+        this.clearStoredUserData();
+      }
+      callback(user);
+    });
   }
 
   /**
-   * Get current user
+   * Get current user (from Firebase or localStorage)
    * @returns {Object|null} - Current user or null
    */
   getCurrentUser() {
-    return auth.currentUser;
+    const firebaseUser = auth.currentUser;
+    if (firebaseUser && firebaseUser.emailVerified) {
+      return firebaseUser;
+    }
+    
+    // Fallback to localStorage if Firebase user is not available
+    return this.getStoredUserData();
   }
 
   /**
@@ -259,7 +401,6 @@ class AuthService {
       case 'auth/invalid-credential':
         return 'Invalid email or password.';
       default:
-        // Return custom error messages or fall back to Firebase message
         return errorMessage || 'An unexpected error occurred. Please try again.';
     }
   }
