@@ -59,12 +59,6 @@ export default function HomePage() {
         <div className="absolute bottom-1/4 right-1/4 w-56 h-56 sm:w-96 sm:h-96 bg-blue-500/5 rounded-full blur-3xl"></div>
         
         <div className="max-w-4xl mx-auto relative z-10">
-          <div className="mb-6">
-            <Badge className="bg-gradient-to-r from-emerald-500/10 to-blue-500/10 text-emerald-300 border-emerald-500/20 mb-4">
-              <Code className="h-3 w-3 mr-1" />
-              Open Source Bounty Platform
-            </Badge>
-          </div>
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-4 leading-tight">
             Learn, Compete,{" "}
             <span className="bg-gradient-to-r from-emerald-400 via-blue-400 to-emerald-400 bg-clip-text text-transparent">
