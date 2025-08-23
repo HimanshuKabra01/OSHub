@@ -61,16 +61,16 @@ export default function CreatePage() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8 text-center">
-          <h1 className="text-4xl font-bold text-white mb-4">
+          <h1 className="text-3xl sm:text-4xl font-bold text-white mb-4">
             Post Technical{" "}
             <span className="bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent">Bounty</span>
           </h1>
-          <p className="text-gray-300 text-lg">Define your technical challenge and attract expert developers</p>
+          <p className="text-gray-300 text-base sm:text-lg">Define your technical challenge and attract expert developers</p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 lg:gap-8">
           {/* Main Form */}
-          <div className="lg:col-span-2">
+          <div className="xl:col-span-2">
             <Card className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 border-gray-700/50 backdrop-blur-sm">
               <CardHeader>
                 <CardTitle className="text-white text-xl flex items-center">
@@ -109,7 +109,7 @@ export default function CreatePage() {
                   />
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="difficulty" className="text-white font-medium">
                       Complexity Level

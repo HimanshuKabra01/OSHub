@@ -82,14 +82,14 @@ export default function BountyDetailsPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-slate-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 lg:gap-8">
           {/* Main Content */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="xl:col-span-2 space-y-6">
             {/* Header */}
             <Card className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 border-gray-700/50 backdrop-blur-sm">
               <CardHeader>
-                <div className="flex justify-between items-start mb-4">
-                  <div className="flex items-center space-x-2">
+                <div className="flex flex-col sm:flex-row justify-between sm:items-start gap-4 mb-4">
+                  <div className="flex flex-wrap items-center gap-2">
                     <Badge variant="secondary" className="bg-gray-700 text-gray-300 font-mono text-xs">
                       {bounty.language}
                     </Badge>
@@ -120,13 +120,13 @@ export default function BountyDetailsPage() {
                       </Badge>
                     )}
                   </div>
-                  <div className="flex items-center text-emerald-400 font-bold text-2xl font-mono">
+                  <div className="flex items-center text-emerald-400 font-bold text-2xl font-mono shrink-0">
                     <IndianRupee className="h-5 w-5 mr-1" />
                     {bounty.bounty.toLocaleString()}
                   </div>
                 </div>
-                <CardTitle className="text-white text-2xl font-semibold">{bounty.title}</CardTitle>
-                <div className="flex items-center space-x-4 text-sm text-gray-400">
+                <CardTitle className="text-white text-2xl md:text-3xl font-semibold">{bounty.title}</CardTitle>
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-2 text-sm text-gray-400">
                   <div className="flex items-center">
                     <Clock className="h-4 w-4 mr-1" />
                     Posted {bounty.timePosted}
@@ -185,35 +185,47 @@ export default function BountyDetailsPage() {
                 {bounty.claims.map((claim, index) => (
                   <div key={claim.id}>
                     <div className="flex items-start space-x-4">
-                      <Avatar className="border-2 border-emerald-500/30">
+                      <Avatar className="border-2 border-emerald-500/30 hidden sm:flex">
                         <AvatarImage src={claim.developer.avatar || "/placeholder.svg"} alt={claim.developer.name} />
                         <AvatarFallback className="bg-gray-700 text-white">
                           {claim.developer.name.charAt(0)}
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex-1">
-                        <div className="flex items-center space-x-2 mb-1">
-                          <h4 className="font-semibold text-white">{claim.developer.name}</h4>
-                          <Badge className="bg-gradient-to-r from-yellow-500/20 to-orange-500/20 text-yellow-400 border-yellow-500/30 text-xs">
-                            ⭐ {claim.developer.reputation}
-                          </Badge>
-                          <span className="text-sm text-gray-400 font-mono">
-                            {claim.developer.completedBounties} bounties completed
-                          </span>
+                        <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-2 gap-2">
+                          <div className="flex items-center gap-3">
+                            <Avatar className="border-2 border-emerald-500/30 sm:hidden flex">
+                              <AvatarImage src={claim.developer.avatar || "/placeholder.svg"} alt={claim.developer.name} />
+                              <AvatarFallback className="bg-gray-700 text-white">
+                                {claim.developer.name.charAt(0)}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div>
+                              <h4 className="font-semibold text-white">{claim.developer.name}</h4>
+                              <div className="flex flex-wrap items-center gap-2 text-xs text-gray-400">
+                                <Badge className="bg-gradient-to-r from-yellow-500/20 to-orange-500/20 text-yellow-400 border-yellow-500/30 text-xs">
+                                  ⭐ {claim.developer.reputation}
+                                </Badge>
+                                <span className="font-mono">
+                                  {claim.developer.completedBounties} bounties completed
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="border-emerald-500/50 text-emerald-400 hover:bg-emerald-500/10 bg-transparent text-xs w-full sm:w-auto shrink-0"
+                          >
+                            View Profile
+                          </Button>
                         </div>
                         <p className="text-gray-300 mb-2 leading-relaxed">{claim.proposal}</p>
-                        <div className="flex items-center space-x-4 text-sm text-gray-400">
+                        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-gray-400">
                           <span>Submitted {claim.timeSubmitted}</span>
                           <span>Est. completion: {claim.estimatedTime}</span>
                         </div>
                       </div>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="border-emerald-500/50 text-emerald-400 hover:bg-emerald-500/10 bg-transparent text-xs"
-                      >
-                        View Profile
-                      </Button>
                     </div>
                     {index < bounty.claims.length - 1 && <Separator className="my-4 bg-gray-700" />}
                   </div>
@@ -237,7 +249,7 @@ export default function BountyDetailsPage() {
                   </Avatar>
                   <div>
                     <h4 className="font-semibold text-white">{bounty.author.name}</h4>
-                    <div className="flex items-center space-x-2 text-sm text-gray-400">
+                    <div className="flex flex-wrap items-center gap-x-2 text-sm text-gray-400">
                       <span>⭐ {bounty.author.reputation}</span>
                       <span>•</span>
                       <span>{bounty.author.completedBounties} bounties posted</span>

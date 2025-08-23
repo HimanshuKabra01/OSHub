@@ -225,10 +225,9 @@ export default function BrowsePage() {
         </div>
 
         {/* Filters */}
-        <div className="bg-black/20 backdrop-blur-sm rounded-xl border border-gray-800/50 p-6 mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-6 gap-4 items-center">
-            {/* Search */}
-            <div className="relative md:col-span-2">
+        <div className="bg-black/20 backdrop-blur-sm rounded-xl border border-gray-800/50 p-4 sm:p-6 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+            <div className="relative sm:col-span-2 xl:col-span-2">
               <Search
                 className="absolute left-3 top-3 h-4 w-4 text-gray-400 cursor-pointer"
                 onClick={handleApplyFilters}
@@ -296,6 +295,34 @@ export default function BrowsePage() {
           </div>
         </div>
 
+        {/* Stats Bar */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <Card className="bg-gradient-to-r from-emerald-500/10 to-blue-500/10 border-emerald-500/20 backdrop-blur-sm">
+            <CardContent className="p-4 text-center">
+              <div className="text-2xl font-bold text-emerald-400 font-mono">24</div>
+              <div className="text-sm text-gray-300">Active Issues</div>
+            </CardContent>
+          </Card>
+          <Card className="bg-gradient-to-r from-green-500/10 to-emerald-500/10 border-green-500/20 backdrop-blur-sm">
+            <CardContent className="p-4 text-center">
+              <div className="text-2xl font-bold text-green-400 font-mono">₹2.4L</div>
+              <div className="text-sm text-gray-300">Total Bounties</div>
+            </CardContent>
+          </Card>
+          <Card className="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border-blue-500/20 backdrop-blur-sm">
+            <CardContent className="p-4 text-center">
+              <div className="text-2xl font-bold text-blue-400 font-mono">156</div>
+              <div className="text-sm text-gray-300">Online Developers</div>
+            </CardContent>
+          </Card>
+          <Card className="bg-gradient-to-r from-orange-500/10 to-red-500/10 border-orange-500/20 backdrop-blur-sm">
+            <CardContent className="p-4 text-center">
+              <div className="text-2xl font-bold text-orange-400 font-mono">3</div>
+              <div className="text-sm text-gray-300">Critical Priority</div>
+            </CardContent>
+          </Card>
+        </div>
+
         {/* Bounties Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {filteredBounties.slice(0, visibleCount).map((bounty) => (
@@ -304,12 +331,9 @@ export default function BrowsePage() {
               className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 border-gray-700/50 hover:border-emerald-500/30 transition-all duration-300 hover:shadow-2xl hover:shadow-emerald-500/10 backdrop-blur-sm group"
             >
               <CardHeader>
-                <div className="flex justify-between items-start mb-3">
-                  <div className="flex items-center space-x-2">
-                    <Badge
-                      variant="secondary"
-                      className="bg-gray-700 text-gray-300 font-mono text-xs"
-                    >
+                <div className="flex flex-wrap justify-between items-start gap-2 mb-3">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Badge variant="secondary" className="bg-gray-700 text-gray-300 font-mono text-xs">
                       {bounty.language}
                     </Badge>
                     <Badge
@@ -329,7 +353,7 @@ export default function BrowsePage() {
                       </Badge>
                     )}
                   </div>
-                  <div className="flex items-center text-emerald-400 font-bold text-lg font-mono">
+                  <div className="flex items-center text-emerald-400 font-bold text-lg font-mono shrink-0">
                     <IndianRupee className="h-4 w-4 mr-1" />
                     {bounty.bounty.toLocaleString()}
                   </div>
@@ -342,7 +366,7 @@ export default function BrowsePage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="flex justify-between items-center text-sm text-gray-500 mb-4">
+                <div className="flex flex-wrap justify-between items-center gap-2 text-sm text-gray-500 mb-4">
                   <div className="flex items-center">
                     <Clock className="h-4 w-4 mr-1" />
                     {bounty.timePosted}
@@ -359,7 +383,7 @@ export default function BrowsePage() {
                     {bounty.difficulty}
                   </Badge>
                 </div>
-                <div className="flex justify-between items-center">
+                <div className="flex flex-wrap justify-between items-center gap-4">
                   <div className="flex items-center space-x-4 text-sm text-gray-400">
                     <div className="flex items-center">
                       <MessageSquare className="h-4 w-4 mr-1" />
@@ -370,10 +394,10 @@ export default function BrowsePage() {
                       {bounty.starred}
                     </div>
                   </div>
-                  <Link to={`/bounty/${bounty.id}`}>
+                  <Link to={`/bounty/${bounty.id}`} className="w-full sm:w-auto">
                     <Button
                       size="sm"
-                      className="bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-700 hover:to-blue-700 text-sm"
+                      className="bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-700 hover:to-blue-700 text-sm w-full"
                     >
                       View Details
                     </Button>
@@ -400,5 +424,5 @@ export default function BrowsePage() {
         )}
       </div>
     </div>
-  );
+  )
 }
