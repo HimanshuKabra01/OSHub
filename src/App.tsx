@@ -14,7 +14,7 @@ import PrivacyPage from "./components/PrivacyPage"
 import TermsPage from "./components/TermsPage"
 import DocsPage from "./pages/DocsPage"
 import AuthService from "./services/authService"
-import DashBoard from './components/DashBoard'
+import DashBoard from './components/Dashboard'
 
 // Types
 interface User {
