@@ -12,22 +12,105 @@ import { auth, db } from "../firebase.js";
 class AuthService {
   
   /**
+   * Initialize authentication state
+   * @returns {Promise<void>}
+   */
+  async initializeAuth() {
+    try {
+      // This method syncs Firebase auth state with localStorage
+      return new Promise((resolve) => {
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+          if (user && user.emailVerified) {
+            // Get user data from Firestore
+            const userData = await this.getUserDocument(user.uid);
+            if (userData) {
+              const combinedUserData = {
+                uid: user.uid,
+                email: user.email,
+                displayName: userData.name || user.displayName,
+                emailVerified: user.emailVerified,
+                accountType: userData.accountType
+              };
+              this.storeUserData(combinedUserData);
+            }
+          } else {
+            this.clearStoredUserData();
+          }
+          unsubscribe();
+          resolve();
+        });
+      });
+    } catch (error) {
+      console.error('Error initializing auth:', error);
+    }
+  }
+
+  /**
+   * Check if user is authenticated
+   * @returns {boolean}
+   */
+  isAuthenticated() {
+    const userData = this.getStoredUserData();
+    return userData && userData.emailVerified;
+  }
+
+  /**
+   * Store user data in localStorage
+   * @param {Object} userData - User data to store
+   */
+  storeUserData(userData) {
+    try {
+      localStorage.setItem('user', JSON.stringify(userData));
+      localStorage.setItem('isAuthenticated', 'true');
+    } catch (error) {
+      console.error('Error storing user data:', error);
+    }
+  }
+
+  /**
+   * Get stored user data from localStorage
+   * @returns {Object|null}
+   */
+  getStoredUserData() {
+    try {
+      const userData = localStorage.getItem('user');
+      return userData ? JSON.parse(userData) : null;
+    } catch (error) {
+      console.error('Error getting stored user data:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Clear stored user data from localStorage
+   */
+  clearStoredUserData() {
+    try {
+      localStorage.removeItem('user');
+      localStorage.removeItem('isAuthenticated');
+    } catch (error) {
+      console.error('Error clearing stored user data:', error);
+    }
+  }
+
+  /**
    * Sign up a new user with email and password
    * @param {string} email - User's email
    * @param {string} password - User's password
    * @param {string} name - User's display name
-   * @param {string} accountType - Type of account (e.g., 'student', 'teacher', 'admin')
+   * @param {string} accountType - Type of account (e.g., 'developer', 'client', 'both')
    * @returns {Promise<Object>} - Success/error response
    */
-  async signUp(email, password, name, accountType = 'user') {
+  async signUp(email, password, name, accountType = 'developer') {
     try {
       // Validate input
       if (!email || !password || !name) {
         throw new Error('Email, password, and name are required');
       }
 
-      if (password.length < 6) {
-        throw new Error('Password should be at least 6 characters long');
+      const passwordValidation = this.validatePassword(password);
+      if (!passwordValidation.isValid) {
+        throw new Error(passwordValidation.message);
       }
 
       // Create user with Firebase Auth
@@ -47,14 +130,18 @@ class AuthService {
         lastLoginAt: null
       });
 
+      const userData = {
+        uid: user.uid,
+        email: user.email,
+        displayName: name.trim(),
+        emailVerified: user.emailVerified,
+        accountType
+      };
+
       return {
         success: true,
         message: 'Account created successfully! Please check your email to verify your account.',
-        user: {
-          uid: user.uid,
-          email: user.email,
-          emailVerified: user.emailVerified
-        }
+        user: userData
       };
 
     } catch (error) {
@@ -90,20 +177,30 @@ class AuthService {
         throw new Error('Please verify your email before logging in. Check your inbox for the verification link.');
       }
 
+      // Get user data from Firestore
+      const firestoreUserData = await this.getUserDocument(user.uid);
+      
       // Update last login time in Firestore
       await this.updateUserDocument(user.uid, {
         lastLoginAt: serverTimestamp(),
         emailVerified: true
       });
 
+      const userData = {
+        uid: user.uid,
+        email: user.email,
+        displayName: firestoreUserData?.name || user.displayName,
+        emailVerified: user.emailVerified,
+        accountType: firestoreUserData?.accountType || 'developer'
+      };
+
+      // Store user data in localStorage
+      this.storeUserData(userData);
+
       return {
         success: true,
         message: 'Login successful!',
-        user: {
-          uid: user.uid,
-          email: user.email,
-          emailVerified: user.emailVerified
-        }
+        user: userData
       };
 
     } catch (error) {
@@ -122,6 +219,7 @@ class AuthService {
   async signOut() {
     try {
       await signOut(auth);
+      this.clearStoredUserData();
       return {
         success: true,
         message: 'Signed out successfully'
@@ -221,7 +319,20 @@ class AuthService {
    * @returns {Function} - Unsubscribe function
    */
   onAuthStateChange(callback) {
-    return onAuthStateChanged(auth, callback);
+    return onAuthStateChanged(auth, async (user) => {
+      if (user && user.emailVerified) {
+        // Get additional user data from Firestore
+        const userData = await this.getUserDocument(user.uid);
+        const enhancedUser = {
+          ...user,
+          displayName: userData?.name || user.displayName,
+          accountType: userData?.accountType
+        };
+        callback(enhancedUser);
+      } else {
+        callback(user);
+      }
+    });
   }
 
   /**
@@ -280,6 +391,13 @@ class AuthService {
    * @returns {Object} - Validation result with isValid and message
    */
   validatePassword(password) {
+    if (!password) {
+      return {
+        isValid: false,
+        message: 'Password is required.'
+      };
+    }
+
     if (password.length < 6) {
       return {
         isValid: false,
@@ -294,9 +412,20 @@ class AuthService {
       };
     }
 
+    // Check for basic complexity
+    const hasLetter = /[a-zA-Z]/.test(password);
+    const hasNumber = /\d/.test(password);
+    
+    if (hasLetter && hasNumber) {
+      return {
+        isValid: true,
+        message: 'Password strength is good.'
+      };
+    }
+
     return {
       isValid: true,
-      message: 'Password strength is good.'
+      message: 'Consider adding numbers and letters for better security.'
     };
   }
 }
