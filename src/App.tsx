@@ -12,6 +12,7 @@ import GuidePage from "./components/Guide";
 import PrivacyPage from "./components/PrivacyPage";
 import TermsPage from "./components/TermsPage";
 import DocsPage from "./pages/DocsPage";
+import HelpPage from "./components/HelpPage";
 
 function App() {
   return (
@@ -64,6 +65,15 @@ function App() {
               <>
                 <Navbar />
                 <GuidePage />
+                <Footer />
+              </>
+            }
+          />
+            <Route
+            path="/help"
+            element={
+              <>
+                <HelpPage/>
                 <Footer />
               </>
             }
