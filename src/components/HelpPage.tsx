@@ -147,37 +147,7 @@ export default function HelpPage() {
             </a>
                 </div>
               </div>
-
             </div>
-          </div>
-        </div>
-
-      </section>
-
-
-
-
-      {/* FAQ */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 fade-up fade-up bg-transparent">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold text-white mb-8 text-center">FAQs</h2>
-          <div className="space-y-6 text-center">
-            {[
-              { q: "How do I set the right bounty amount?", a: "Estimate based on complexity, time required, and importance of the issue." },
-              { q: "Can multiple people claim the same issue?", a: "Usually no — but maintainers may allow multiple PRs and choose the best one." },
-              { q: "How do contributors get paid?", a: "Once the PR is merged, the maintainer approves the payout and bounty is released." },
-              { q: "What if my PR is rejected?", a: "You can improve it per feedback or pick another open issue." },
-            ].map((faq, i) => (
-              <Card key={i} className="bg-gray-800/40 border-gray-700/50 backdrop-blur-sm hover:border-gray-600/40 transition">
-                <CardHeader className="flex items-center gap-3">
-                  <HelpCircle className="h-6 w-6 text-emerald-400" />
-                  <CardTitle className="text-white">{faq.q}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-400">{faq.a}</p>
-                </CardContent>
-              </Card>
-            ))}
           </div>
         </div>
       </section>
