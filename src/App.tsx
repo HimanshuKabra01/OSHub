@@ -18,6 +18,7 @@ import GuidePage from "./components/Guide";
 import PrivacyPage from "./components/PrivacyPage";
 import TermsPage from "./components/TermsPage";
 import DocsPage from "./pages/DocsPage";
+import HelpPage from "./components/HelpPage";   // ✅ your addition
 import Loader from "./components/ui/loader";
 
 function App() {
@@ -85,6 +86,16 @@ function App() {
             <>
               <Navbar />
               <GuidePage />
+              <Footer />
+            </>
+          }
+        />
+        {/* ✅ your Help page route */}
+        <Route
+          path="/help"
+          element={
+            <>
+              <HelpPage />
               <Footer />
             </>
           }
