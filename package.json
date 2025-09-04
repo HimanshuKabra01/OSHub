@@ -17,7 +17,7 @@
     "@radix-ui/react-separator": "^1.1.7",
     "@radix-ui/react-slot": "^1.2.3",
     "class-variance-authority": "^0.7.1",
-    "firebase": "^12.1.0",
+    "firebase": "^12.2.1",
     "framer-motion": "^12.23.12",
     "gsap": "^3.13.0",
     "lucide-react": "^0.528.0",

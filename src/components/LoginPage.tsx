@@ -5,10 +5,16 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Github, Mail, Terminal, Eye, EyeOff } from "lucide-react"
+import { Terminal, Eye, EyeOff } from "lucide-react"
 import { Link, useNavigate } from "react-router-dom"
 import authService from "@/services/authService"
+
+// A simple SVG component for the Google icon
+const GoogleIcon = () => (
+  <svg className="mr-2 h-4 w-4" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="google" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512">
+    <path fill="currentColor" d="M488 261.8C488 403.3 381.5 512 244 512 110.3 512 0 398.8 0 256S110.3 0 244 0c73 0 135.3 29.7 181.4 76.2l-65.5 64.2C335.5 113.5 293.5 96 244 96c-85.6 0-154.5 68.5-154.5 153.3s68.9 153.3 154.5 153.3c92.2 0 131.3-64.4 136.8-98.2H244v-75.4h236.1c2.3 12.7 3.9 26.9 3.9 41.4z"></path>
+  </svg>
+);
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
@@ -25,13 +31,26 @@ export default function LoginPage() {
     const result = await authService.signIn(email, password)
 
     if (result.success) {
-      navigate("/dashboard")
+      navigate("/dashboard") // Or your desired route
     } else {
       setError(result.message)
     }
 
     setLoading(false)
   }
+  
+  // New handler for Google Sign-In
+  const handleGoogleLogin = async () => {
+    setLoading(true);
+    setError("");
+    const result = await authService.signInWithGoogle();
+    if (result.success) {
+      navigate("/dashboard"); // Or your desired route
+    } else {
+      setError(result.message);
+    }
+    setLoading(false);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-slate-900 flex items-center justify-center p-4">
@@ -48,9 +67,31 @@ export default function LoginPage() {
         </CardHeader>
         <CardContent className="space-y-4">
 
-          {/* error message */}
+          {/* Google Button */}
+          <Button
+            variant="outline"
+            onClick={handleGoogleLogin}
+            disabled={loading}
+            className="w-full bg-gray-800/50 border-gray-700 text-white hover:bg-gray-700/50 hover:text-white"
+          >
+            <GoogleIcon />
+            Continue with Google
+          </Button>
+
+          {/* Divider */}
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t border-gray-700" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-gray-900/50 px-2 text-gray-400">Or continue with email</span>
+            </div>
+          </div>
+
+          {/* Error Message */}
           {error && <p className="text-red-500 text-sm text-center">{error}</p>}
 
+          {/* Email and Password Form */}
           <div className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email" className="text-white font-medium">
@@ -93,7 +134,7 @@ export default function LoginPage() {
             className="w-full bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-700 hover:to-blue-700"
             size="lg"
           >
-            {loading ? "Signing in..." : "Sign In"}
+            {loading ? "Signing in..." : "Sign In with Email"}
           </Button>
 
           <div className="text-center text-sm">

@@ -1,16 +1,65 @@
 // src/services/authService.js
-import { 
-  createUserWithEmailAndPassword, 
-  signInWithEmailAndPassword, 
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
   sendEmailVerification,
   signOut,
-  onAuthStateChanged
+  onAuthStateChanged,
+  signInWithPopup // 👈 Import the signInWithPopup function
 } from "firebase/auth";
 import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
-import { auth, db } from "../firebase.js";
+import { auth, db, googleProvider } from "../firebase.js"; // 👈 Import the googleProvider
 
 class AuthService {
-  
+
+  // ... (existing signUp, signIn, and other methods remain unchanged)
+
+  /**
+   * Sign in user with Google
+   * @returns {Promise<Object>} - Success/error response
+   */
+  async signInWithGoogle() {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+
+      // Check if the user already exists in Firestore
+      const userDoc = await this.getUserDocument(user.uid);
+
+      if (!userDoc) {
+        // If it's a new user, create a document for them
+        await this.createUserDocument(user.uid, {
+          email: user.email.toLowerCase(),
+          name: user.displayName,
+          accountType: 'user',
+          emailVerified: true, // Google accounts are already verified
+          createdAt: serverTimestamp(),
+          lastLoginAt: serverTimestamp()
+        });
+      } else {
+        // If user exists, just update their last login time
+        await this.updateUserDocument(user.uid, {
+          lastLoginAt: serverTimestamp()
+        });
+      }
+
+      return {
+        success: true,
+        message: 'Login successful!',
+        user: {
+          uid: user.uid,
+          email: user.email
+        }
+      };
+    } catch (error) {
+      console.error('Google sign in error:', error);
+      return {
+        success: false,
+        message: this.getErrorMessage(error)
+      };
+    }
+  }
+
   /**
    * Sign up a new user with email and password
    * @param {string} email - User's email
@@ -203,7 +252,7 @@ class AuthService {
     try {
       const userRef = doc(db, 'users', uid);
       const userSnap = await getDoc(userRef);
-      
+
       if (userSnap.exists()) {
         return userSnap.data();
       } else {
